@@ -1,18 +1,67 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Inventory Management</h1>
-<form method="POST">
-    <input type="text" name="name" placeholder="Product Name" required>
-    <input type="number" name="stock" placeholder="Stock Quantity" required>
-    <input type="number" step="0.01" name="price" placeholder="Price" required>
-    <button type="submit" class="btn btn-primary">Add Product</button>
-</form>
-<hr>
-<h3>Current Products</h3>
-<table class="table">
-    <tr><th>Name</th><th>Stock</th><th>Price</th></tr>
-    {% for p in products %}
-    <tr><td>{{ p.name }}</td><td>{{ p.stock }}</td><td>${{ p.price }}</td></tr>
-    {% endfor %}
-</table>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-warehouse text-primary me-2"></i>Inventory</h1>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-white fw-bold">Add New Product</div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <input type="text" name="name" class="form-control" placeholder="Product Name" required>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-text">Qty</span>
+                        <input type="number" name="stock" class="form-control" placeholder="0" required>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" step="0.01" name="price" class="form-control" placeholder="0.00" required>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Add Product</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="ps-3">Product Name</th>
+                    <th>Stock Level</th>
+                    <th>Unit Price</th>
+                    <th class="text-end pe-3">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in products %}
+                <tr>
+                    <td class="ps-3 fw-semibold">{{ p.name }}</td>
+                    <td>{{ p.stock }} units</td>
+                    <td>${{ p.price }}</td>
+                    <td class="text-end pe-3">
+                        {% if p.stock > 10 %}
+                        <span class="badge bg-success-subtle text-success">In Stock</span>
+                        {% elif p.stock > 0 %}
+                        <span class="badge bg-warning-subtle text-warning">Low Stock</span>
+                        {% else %}
+                        <span class="badge bg-danger-subtle text-danger">Out of Stock</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
