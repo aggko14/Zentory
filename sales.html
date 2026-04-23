@@ -1,56 +1,78 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Sales Management</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-cart-shopping text-success me-2"></i>Sales Management</h1>
+</div>
 
-<h4>Record New Sale</h4>
-<form method="POST" class="mb-4">
-    <div class="row">
-        <div class="col-md-4">
-            <select name="customer_id" class="form-select" required>
-                <option value="">Select Customer</option>
-                {% for c in customers %}
-                <option value="{{ c.id }}">{{ c.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-md-4">
-            <select name="product_id" class="form-select" required>
-                <option value="">Select Product</option>
-                {% for p in products %}
-                <option value="{{ p.id }}">{{ p.name }} (${{ p.price }}) - Stock: {{ p.stock }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-md-2">
-            <input type="number" name="quantity" class="form-control" placeholder="Qty" min="1" required>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-success w-100">Record Sale</button>
-        </div>
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-header bg-white fw-bold"><i class="fas fa-plus me-2 text-success"></i>Record New Sale</div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold text-muted">Customer</label>
+                    <select name="customer_id" class="form-select border-0 bg-light" required>
+                        <option value="">Select Customer</option>
+                        {% for c in customers %}
+                        <option value="{{ c.id }}">{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold text-muted">Product</label>
+                    <select name="product_id" class="form-select border-0 bg-light" required>
+                        <option value="">Select Product</option>
+                        {% for p in products %}
+                        <option value="{{ p.id }}">{{ p.name }} (${{ p.price }}) - [Stock: {{ p.stock }}]</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">Quantity</label>
+                    <input type="number" name="quantity" class="form-control border-0 bg-light" placeholder="Qty" min="1" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success w-100 fw-bold">Record Sale</button>
+                </div>
+            </div>
+        </form>
     </div>
-</form>
+</div>
 
-<h4>Sales History</h4>
-<table class="table table-striped">
-    <thead>
-        <tr><th>Date</th><th>Customer</th><th>Product</th><th>Qty</th><th>Total</th><th>Action</th></tr>
-    </thead>
-    <tbody>
-        {% for sale in sales %}
-        <tr>
-            <td>{{ sale.date.strftime('%Y-%m-%d %H:%M') }}</td>
-            <td>{{ sale.customer.name if sale.customer else sale.customer_id }}</td>
-            <td>{{ sale.product.name if sale.product else sale.product_id }}</td>
-            <td>{{ sale.quantity }}</td>
-            <td>${{ sale.total }}</td>
-            <td>
-                <form method="POST" style="display:inline;">
-                    <input type="hidden" name="delete_id" value="{{ sale.id }}">
-                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this sale?')">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white fw-bold">Sales History</div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light text-muted small text-uppercase">
+                <tr>
+                    <th class="ps-3">Date</th>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales %}
+                <tr>
+                    <td class="ps-3 small text-muted">{{ sale.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td class="fw-semibold text-dark">{{ sale.customer.name if sale.customer else sale.customer_id }}</td>
+                    <td><span class="badge bg-light text-dark border">{{ sale.product.name if sale.product else sale.product_id }}</span></td>
+                    <td>{{ sale.quantity }}</td>
+                    <td class="fw-bold text-success">${{ sale.total }}</td>
+                    <td class="text-center">
+                        <form method="POST" style="display:inline;">
+                            <input type="hidden" name="delete_id" value="{{ sale.id }}">
+                            <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('Delete this sale?')">
+                                <i class="fas fa-trash-can"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
