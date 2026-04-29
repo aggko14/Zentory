@@ -1,6 +1,6 @@
 # Zentory
 
-![Zentory Logo](static/Logo.png)
+![Zentory Logo](Logo.png)
 
 **Zentory** is a lightweight, free, and open-source all-in-one business management system designed for small and medium-sized enterprises (SMEs).
 
